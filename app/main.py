@@ -11,7 +11,7 @@ sentiment_detection = pipeline(
 app = FastAPI()
 
 
-@app.post("/predict_sentiment/")
+@app.post("/")
 def predict_sentiment(text: str):
     result = sentiment_detection(text)
     return {"result": result}
