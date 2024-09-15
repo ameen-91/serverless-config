@@ -24,11 +24,6 @@ class TextRequest(BaseModel):
 
 
 # Define a batch request model to handle multiple texts at once with Annotated
-class BatchTextRequest(BaseModel):
-    texts: Annotated[
-        List[str],
-        List[StringConstraints(min_length=1, strip_whitespace=True)],
-    ]
 
 
 @app.post("/predict/")
@@ -37,19 +32,6 @@ async def predict_sentiment(request: TextRequest):
         # Perform sentiment detection
         result = sentiment_detection(request.text)
         return {"result": result}
-    except Exception as e:
-        # Handle unexpected errors
-        raise HTTPException(
-            status_code=500, detail=f"Error processing request: {str(e)}"
-        )
-
-
-@app.post("/predict_batch/")
-async def predict_sentiment_batch(request: BatchTextRequest):
-    try:
-        # Perform sentiment detection on a batch of texts
-        results = [sentiment_detection(text) for text in request.texts]
-        return {"results": results}
     except Exception as e:
         # Handle unexpected errors
         raise HTTPException(
